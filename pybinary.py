@@ -2,9 +2,13 @@ from math import *
 #################################################
 """
 COMMANDS IN THIS FILE TO MANIPULATE BINARIES:
+
 makebinary(n)
+
 makenumber(n)
+
 add(a,b)
+
 multiply(a,b)
 
 Other:
