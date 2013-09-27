@@ -50,6 +50,8 @@ def finish(c):
     
 def add(a,b):
     c = []
+    if a==[] and b==[]:
+        return []
     if len(a)!=len(b):
         k = abs(len(a)-len(b))
         if len(a)> len(b):
@@ -72,7 +74,7 @@ def add(a,b):
         elif a[i] + b[i]== 3:
             c = c + [1]
             a[i+1] = a[i+1]+1
-    if c[-1]==0:
+    if c[-1]==0 and len(a)>1:
         c = c[:-1]
     return c
             
