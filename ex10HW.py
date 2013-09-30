@@ -1,3 +1,22 @@
+###################################################
+# # Usefull functions within this file:
+
+# # Cumsum(list)
+# # is_sorted(list)
+# # anagram(a,b)
+# # has_duplicates(list)
+# # guess(numberofkids, numberoftrials)birthday problem
+# # remove_duplicates(list)
+# # methodtest2(list) imports word.txt
+# # isinlist(word,list)
+# # reverse_pairs(a)
+
+###############################################
+
+
+
+
+
 def cumsum(a):
     if a==[] or a==[0]:
         return 0
