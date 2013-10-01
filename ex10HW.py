@@ -6,7 +6,7 @@
 # # anagram(a,b)
 # # has_duplicates(list)
 # # guess(numberofkids, numberoftrials)birthday problem
-# # remove_duplicates(list)
+# # remove_duplicate(list)
 # # methodtest2(list) imports word.txt
 # # isinlist(word,list)
 # # reverse_pairs(a)

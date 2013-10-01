@@ -187,24 +187,15 @@ def two_words(a,ls,c):
 #     temp=ex12HW.two_words(temp,a,i)
 # longest words: relapsers,scrapings, sheathers
 
-# Eureka! since the longest words built with the method above were 9 letters in 
-# order to beat it i just need to test all 10 letter words so just 9,199 words
-
-
-def check(tenlist,ninelist,a):
+def check(tenlist,ninelist):
     b=[]
     for word in tenlist:
-        shorten(word,a,ninelist,b)
+        shorten(word,ninelist,b)
     return b
-def shorten(word, a,ninelist,b):
-    for i in range (0,len(word)-1):
+
+def shorten(word,ninelist,b):
+    for i in range (0,len(word)):
             if word[:i]+word[i+1:] in ninelist:
-                a.append(word)
                 b.append(word[:i]+word[i+1:])
-                return True
 
-# only 816 word! so only 816 9 letter words can be made into ten letter words by
-# adding a character, after several runs, it turns out there are no ten words!
-
-# some but possinbly not all 9 letter words are: relapsers,scrapings, sheathers
-
+# this is def not an elegant solution  
