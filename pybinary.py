@@ -22,7 +22,7 @@ def mb(x):
 """
 def makebinary(n):
     if n==0:
-        return 0
+        return [0]
     elif n==[]:
         return []
     c=[]
@@ -74,7 +74,7 @@ def add(a,b):
         elif a[i] + b[i]== 3:
             c = c + [1]
             a[i+1] = a[i+1]+1
-    if c[-1]==0 and len(a)>1:
+    while c[-1]==0 and len(c)>1:
         c = c[:-1]
     return c
             
@@ -88,6 +88,6 @@ def makenumber(n):
 def multiply(a,b):
     csum=[] 
     for i in range(len(b)):
-       csum= addbinaries(csum,([0]*i)+(a*b[i]))
+       csum= add(csum,([0]*i)+(a*b[i]))
     return csum
 

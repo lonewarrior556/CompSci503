@@ -48,8 +48,17 @@ def find_biggest(d):
     n=0
     for x in d:
         if d.get(x)>n:
-            print biggest, n
             biggest=x
             n=d.get(x)
     print biggest, n
+    return biggest
     
+# Exercise 13.3. Modify the program from the previous exercise to print the 20 
+# most frequently-used words in the book
+
+def top20(d):
+    b=''
+    for i in range(20):
+        b=find_biggest(d)
+        d[b]=1
+        
