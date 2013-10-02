@@ -11,8 +11,6 @@ add(a,b)
 
 multiply(a,b)
 
-Other:
-finish(n)-> cuts off needless zeros
 """
 #############################################
 """
@@ -39,30 +37,19 @@ def divideby2s (n,b,c):
         c= [d] + c
         b = b-1
         return divideby2s(n,b,c)
-
-def finish(c):
-    #just to cut off needless zeros
-    if c[-1] == 0:
-        c = c[:-1]
-        return finish(c)
-    else:
-        return c
     
 def add(a,b):
     c = []
     if a==[] and b==[]:
         return []
     if len(a)!=len(b):
-        k = abs(len(a)-len(b))
+        k = abs(len(a)-len(b))+1
         if len(a)> len(b):
             for j in range (k):
                 b = b + [0]
         else:
             for j in range (k):
                 a = a + [0]
-    if a[-1] or b [-1] == 1:
-        a = a + [0]
-        b = b + [0]
     for i in range(len(b)):
         if a[i] + b[i]== 0:
             c = c + [0]
