@@ -43,13 +43,15 @@ def add(a,b):
     if a==[] and b==[]:
         return []
     if len(a)!=len(b):
-        k = abs(len(a)-len(b))+1
+        k = abs(len(a)-len(b))
         if len(a)> len(b):
             for j in range (k):
                 b = b + [0]
         else:
             for j in range (k):
                 a = a + [0]
+    a+=[0]
+    b+=[0]
     for i in range(len(b)):
         if a[i] + b[i]== 0:
             c = c + [0]
