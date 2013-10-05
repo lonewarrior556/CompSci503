@@ -144,3 +144,56 @@ def write(tup,d):
     tup=tuple(tup)
     write(tup,d)
     
+# Exercise 13.9. 
+# The 'rank' of a word is its position in a list of words sorted by frequency: the most common word has rank 1, the second most common has rank 2, etc.
+# Zipf's law describes a relationship between the ranks and frequencies of words in natural languages
+# (http: // en. wikipedia. org/ wiki/ Zipf's_ law ). 
+# Specifically, it predicts that the frequency, f , of the word with rank r is:
+
+#                             f = cr -s
+
+# where s and c are parameters that depend on the language and the text. 
+# If you take the logarithm of both sides of this equation, you get:
+
+# log f = log c - s log r
+
+# So if you plot log f versus log r, you should get a straight line with slope -s and intercept log c.
+# Write a program that reads a text from a file, counts word frequencies, and prints one line for each
+# word, in descending order of frequency, with log f and log r. Use the graphing program of your
+# choice to plot the results and check whether they form a straight line. Can you estimate the value of
+# s?
+    
+def sortdic(d):
+    import math
+    ls=d.items()
+    logf=[]
+    logr=[]
+    ls.sort(key=lambda x:x[1],reverse=True)
+    for i in range(len(ls)-1):
+        logf.append( math.log(ls[i][1]))
+        logr.append( math.log(i+1))
+    return (logr,logf)
+
+
+
+    #     if i%2==0:
+    #         logf+=math.log(ls[i][1])
+    #         logr-=math.log(i+1)
+    #     else: 
+    #         logf-=math.log(ls[i][1])
+    #         logr+=math.log(i+1)
+    # return (logf,logr) #given this s=0.8071824484324789
+
+def findk(d):
+    import math
+    ls=d.items()
+    s=0.8071824484324789
+    k=0
+    ls.sort(key=lambda x:x[1],reverse=True)
+    for i in range(len(ls)-1):
+        k+=math.log(ls[i][1])+s*math.log(i+1)
+    return k/(len(ls)-1) #k=7.268894074998243
+
+#equation = log f = 7.268894074998243 -0.8071824484324789(log r)
+    
+    
