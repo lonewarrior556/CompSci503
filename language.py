@@ -93,7 +93,9 @@ def nfa2dfa(nfa):
             for z in nfa.symbols:
                 d[x][z]=tuple(sorted((temp.get(z))))
         else:
+#          this line below  was neccessary as d[x][z] would not work if d[x] was not a dictionary as a value of dictionary d
             d[x]=dict()
+#
             for z in nfa.symbols:
                 d[x][z]=tuple(sorted(list(set(d[x[:-1]].get(z)+(d[x[-1:]].get(z))))))
     ls=[]

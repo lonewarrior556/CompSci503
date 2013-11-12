@@ -18,6 +18,40 @@ baller way to do it
 def mb(x):
     return [x%2]+2*mb(x/2)
 """
+def add1(l,c=0):
+    if l==[] or type(l)!=list:
+        return l
+    if c+1 > len(l):
+        l=l+[0]
+    if l[c]==0:
+        l[c]=1
+        return l
+    else: 
+        l[c]=0
+        c+=1
+        return add1(l,c)
+
+
+def machineadd(a,b):
+    if type(a)!=type(b)!=list:
+        print "does not fempute"
+        return a,b
+    a=a+(len(b)+1)*[0]
+    b=b+(len(a)-len(b))*[0]
+    d={0:{1:1,0:0,2:0},1:{1:0,2:1,0:1}}
+    cb=0
+    ls=[]
+    for x,y in zip(a,b):
+        ls.append(d[cb][x+y])
+        if cb==0 and x+y == 2:
+            cb=1
+        elif cb==1 and x+y == 0:
+            cb=0
+    while ls[-1]==0 and len(ls)>1:
+        ls=ls[:-1]
+    return ls
+    
+        
 def makebinary(n):
     if n==0:
         return [0]

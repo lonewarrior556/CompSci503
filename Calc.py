@@ -35,15 +35,23 @@ def minus(a):
         else: b= b-x
     return b
 
-
+d={'pi':3.141592,'e':2.7183}
 def calc(a):
+    global d
+    dic =d
     b=[]
-    if type(a)!= list and type(a)!= tuple:
+    if type(a)!= list and type(a)!= tuple or len(a)<3:
         return a
     for i in range(len(a)):
         if type(a[i]) == tuple or type(a[i]) == list:
             b+=[calc(a[i])]
-        else: b+= [a[i]]
+        else:
+            if type(a[i]) != int and not callable(a[i]):
+                if a[i] in dic:
+                    b+=[d[a[i]]]
+                else:
+                    return 'variable not defined',a[i]
+            else:b+= [a[i]]
         
     return mcalc(b)
            
@@ -51,4 +59,5 @@ def calc(a):
 def mcalc(a):
     a= map(a[0],[[a[1],a[2]]])
     return a[0]
-    
+
+
