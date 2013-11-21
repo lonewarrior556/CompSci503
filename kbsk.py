@@ -239,6 +239,7 @@ def renew(fr) :
 #   discovered from unification.
 #   otherwise, return None
 import string
+
 def clean(a):
     if type(a)!=str:
         a=str(a)
@@ -247,7 +248,7 @@ def clean(a):
     a=a.replace(' ','')
     return a
 
-def tt(a):
+def tt(a):#tuple to tuple canges a(k) to a,k
     if '(' in a:
         if len(a)==4:
             a=a.replace(')','')
@@ -258,25 +259,25 @@ def tt(a):
     return a
 
 def infer(fact, rule):
-    a=clean(fact)
-    b=clean(rule)
+    a=clean(fact)# changes 'FACT a' to 'a'
+    b=clean(rule)# changes 'RULE a => FACT b' to 'a=>b'
     if  a+"=>" in b:
         b=b.replace(a+"=>",'')
-        if '=>' in b:
+        if '=>' in b:# returns rule
             return rules.RULE(tt(b[:b.find("=>")]),rules.FACT(tt(b[b.find('=>')+2:])))
-        return rules.FACT(tt(b))
-    if a==a.lower():
+        return rules.FACT(tt(b)) #returns Fact
+    if a==a.lower(): #fact has no Variables
         if b==b.lower():
             return None
-        else: 
+        else:# changing a variable to a constant to see if it matches the fact 
             for x in string.uppercase:
                 for y in string.lowercase:
                     if a in b.replace(x,y):
                         return infer(a,b.replace(x,y))
-    else:
+    else: #fact has a variable
         for x in string.uppercase:
             for y in string.lowercase:
-                if a.replace(x,y) in b:
+                if a.replace(x,y) in b: # changing each variable to constants
                     return infer(a.replace(x,y),b)
 
 # test inference
