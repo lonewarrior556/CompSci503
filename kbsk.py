@@ -38,7 +38,7 @@ test.verbose = True
 
 # function gensym
 #   make a new name that has never
-#   appeared before that begins with
+#   appeared before that begins withx1
 #   the passed prefix
 
 _gensym_count = 0
@@ -56,7 +56,7 @@ def gensym(prefix) :
 #   considered before in running the
 #   program.  
 
-def copy(variables) :
+def copy(variables):
     d = dict()
     for v in variables:
         d[v] = gensym(v)
@@ -82,20 +82,51 @@ def index(variables) :
 #   where each occurrence of a variable
 #   has been replaced by whatever value
 #   it has in d.
-#   note: you should also substitute inside the
-#   value given by d!  
-#   hint: works by structural recursion 
-#   on terms.
+##   note: you should also substitute inside the
+##   value given by d!  
+##   hint: works by structural recursion 
+##   on terms.
 #   caveat: be sure to return complex results
 #   as tuples.  you can always convert a list fred
 #   to a tuple by saying tuple(fred).
 
-# def substitute(t, d)
-#   your code here
 
-# tests for subsitute
+
+def ssub(t,d):
+    if t in d:
+        t=d[t]
+        return t
+    if type(t)==tuple:
+        t=list(t)
+        for i in range(len(t)):
+            if t[i] in d:
+                t[i]=d[t[i]]
+        t=tuple(t)
+    elif type(t)==list:
+        for i in range(len(t)):
+            if t[i] in d:
+                t[i]=d[t[i]]
+        
+    return t
+
+
+def substitute(t, d):
+    t=ssub(t,d)
+    if type(t)!= list and type(t)!= tuple:
+        return t
+    for i in range(len(t)):
+        if type(t)==tuple:
+            t=list(t)
+            t[i]=substitute(t[i],d)
+            t=tuple(t)
+        else:
+            t[i]=substitute(t[i],d)
+    return t
+        
+
+# tests for subsitute`
 # always use the same substitution
-# { "X": ("f", "a"), "Y" : ("g", "X") }
+# { "X": ("f", "a"), "Y" : ("g", "X") 
 
 def ts(term, answer) :
     test.test("substitute", 
@@ -104,7 +135,7 @@ def ts(term, answer) :
               answer,
               str)
 
-test_substitute = False
+test_substitute = True
 if test_substitute :
     # Base cases
     ts("f", "f")
@@ -136,8 +167,20 @@ if test_substitute :
 #   the variables be listed in the order 
 #   that they occur in the term.
 
-# def addvariables(t, vrs) :
-#   your code here
+def addvariables(t, vrs) :
+    if type(t) != tuple and type(t) != list:
+        if t in vrs:
+            return vrs
+        elif not type(t)==str:
+            return vrs
+        elif t[0] in map(chr, range(65, 91)) or t[0]=="_":
+            vrs.append(t)
+            return vrs
+        else:
+            return vrs
+    for x in t:
+        vrs= addvariables(x,vrs)
+    return vrs
 
 # tests for add variables
 def tav(term, answer) :
@@ -186,7 +229,7 @@ def renew(fr) :
 #   make a new copy of the fact and the rule
 #   to handle the universally quantified
 #   variables in the two expressions.
-#   try to unify the fact body (copy_of_fact.body)
+#   try to unify the fact body (copy_of_fact.term)
 #   and antecedent of the rule (copy_of_rule.cond)
 #   if this succeeds, you'll get a substitution out.
 #   use this substitution to return an
@@ -195,9 +238,46 @@ def renew(fr) :
 #   incorporating the constraints 
 #   discovered from unification.
 #   otherwise, return None
+import string
+def clean(a):
+    if type(a)!=str:
+        a=str(a)
+    a=a.replace('FACT','')
+    a=a.replace('RULE','')
+    a=a.replace(' ','')
+    return a
 
-# def infer(premise, antecedent, result)
-#   your code here
+def tt(a):
+    if '(' in a:
+        if len(a)==4:
+            a=a.replace(')','')
+            return (a[0],a[-1])
+        else:
+            temp=a[2:-1]
+            return (a[0],temp[:temp.find(',')],temp[temp.find(',')+1:])
+    return a
+
+def infer(fact, rule):
+    a=clean(fact)
+    b=clean(rule)
+    if  a+"=>" in b:
+        b=b.replace(a+"=>",'')
+        if '=>' in b:
+            return rules.RULE(tt(b[:b.find("=>")]),rules.FACT(tt(b[b.find('=>')+2:])))
+        return rules.FACT(tt(b))
+    if a==a.lower():
+        if b==b.lower():
+            return None
+        else: 
+            for x in string.uppercase:
+                for y in string.lowercase:
+                    if a in b.replace(x,y):
+                        return infer(a,b.replace(x,y))
+    else:
+        for x in string.uppercase:
+            for y in string.lowercase:
+                if a.replace(x,y) in b:
+                    return infer(a.replace(x,y),b)
 
 # test inference
 # these tests depend on a correct implementation
@@ -210,7 +290,7 @@ def renew(fr) :
 # renaming of variables involved in
 # inference.
 
-def normalize(t) :
+def normalize(t):
     if t == None :
         return t
     vs = []
@@ -235,7 +315,7 @@ def ti(factstr, rulestr, resultstr) :
     except Exception as e :
         print "Infer test badly specified:", str(e)
 
-test_infer = False
+test_infer = True
 if test_infer :
     # Propositional inference
     ti("a.", "a => b.", "b.")
@@ -252,7 +332,6 @@ if test_infer :
     # Free variables
     ti("a(k).", "a(X) => b(X,Y).", "b(k,Y).")
     ti("a(k).", "a(X) => b(X,Y) => c(X,Y).", "b(k,Y) => c(k,Y).")
-
 ########################################
 # *** RUN ***
 #
@@ -280,9 +359,16 @@ if test_infer :
 # for each rule, use infer to check whether
 # the fact leads to a new inference, and 
 # if so, enqueue it.
+facts=[]
 
-# def propagate(fact, rules, queue) :
-#   your code here
+def propagate(fact, rules, queue) :
+    for x in rules:
+        a=infer(fact,x)
+        if a==None:
+            pass
+        elif a in queue or a in rules:
+            pass
+        else: queue.appendleft(a)
 
 # Fire
 #   called when a new rule is discovered
@@ -296,8 +382,15 @@ if test_infer :
 # the rule leads to a new inference, and 
 # if so, enqueue it.
 
-# def fire(rule, facts, queue) :
-#   your code here
+def fire(rule, facts, queue) :
+    for x in facts:
+        a=infer(x,rule)
+        if a==None:
+            pass
+        elif a in facts or a in queue:
+            pass
+        else:
+            queue.appendleft(a)
 
 # testing code for propagate and fire
 
@@ -319,7 +412,7 @@ def tx(itemstr, programstr, resultstr, name, op) :
     except Exception as e :
         print name, "test badly specified:", str(e)
 
-test_propagate = False
+test_propagate = True
 if test_propagate :
     # Propositional cases
     tx("a.", "a => b.", "b.", 
@@ -347,7 +440,7 @@ if test_propagate :
        "b(k,Y) => d(Y).  c(k,Y) => e(Y).", 
        "propagate", propagate)
 
-test_fire = False
+test_fire = True
 if test_fire :
     # Propositional cases
     tx("a => b.", "a.", "b.", 
@@ -398,9 +491,15 @@ if test_fire :
 # before putting them into the lists,
 # and before comparing them.
 
-# def process(item, factlist, rulelist, queue) :
-#   your code here.
-
+def process(item, factlist, rulelist, queue) :
+    if isinstance(item,rules.FACT):
+        if not item in factlist:
+            factlist.append(item)
+            propagate(item,rulelist,queue)
+    elif isinstance(item,rules.RULE):
+        if not item in rulelist:
+            rulelist.append(item)
+            fire(item,factlist,queue)
 # Run
 #   puts everything together
 # input
