@@ -243,7 +243,6 @@ def renew(fr) :
 #   otherwise, return None
 
 def infer(fact,rule):
-    print fact,rule
     d=dict()
     def sub(n):
         return substitute(n,d)
