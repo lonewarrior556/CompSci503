@@ -226,9 +226,12 @@ def renew(fr) :
 #   given:
 #     FACT fact
 #     RULE rule
+
 #   make a new copy of the fact and the rule
 #   to handle the universally quantified
 #   variables in the two expressions.
+
+
 #   try to unify the fact body (copy_of_fact.term)
 #   and antecedent of the rule (copy_of_rule.cond)
 #   if this succeeds, you'll get a substitution out.
@@ -238,47 +241,54 @@ def renew(fr) :
 #   incorporating the constraints 
 #   discovered from unification.
 #   otherwise, return None
-import string
 
-def clean(a):
-    if type(a)!=str:
-        a=str(a)
-    a=a.replace('FACT','')
-    a=a.replace('RULE','')
-    a=a.replace(' ','')
-    return a
+def infer(fact,rule):
+    print fact,rule
+    d=dict()
+    def sub(n):
+        return substitute(n,d)
+    if unify.unify(fact.term,rule.cond,d):
+        return rule.result.xform(sub)
+    
 
-def tt(a):#tuple to tuple canges a(k) to a,k
-    if '(' in a:
-        if len(a)==4:
-            a=a.replace(')','')
-            return (a[0],a[-1])
-        else:
-            temp=a[2:-1]
-            return (a[0],temp[:temp.find(',')],temp[temp.find(',')+1:])
-    return a
-
-def infer(fact, rule):
-    a=clean(fact)# changes 'FACT a' to 'a'
-    b=clean(rule)# changes 'RULE a => FACT b' to 'a=>b'
-    if  a+"=>" in b:
-        b=b.replace(a+"=>",'')
-        if '=>' in b:# returns rule
-            return rules.RULE(tt(b[:b.find("=>")]),rules.FACT(tt(b[b.find('=>')+2:])))
-        return rules.FACT(tt(b)) #returns Fact
-    if a==a.lower(): #fact has no Variables
-        if b==b.lower():
-            return None
-        else:# changing a variable to a constant to see if it matches the fact 
-            for x in string.uppercase:
-                for y in string.lowercase:
-                    if a in b.replace(x,y):
-                        return infer(a,b.replace(x,y))
-    else: #fact has a variable
-        for x in string.uppercase:
-            for y in string.lowercase:
-                if a.replace(x,y) in b: # changing each variable to constants
-                    return infer(a.replace(x,y),b)
+# import string
+# def clean(a):
+#     if type(a)!=str:
+#         a=str(a)
+#     a=a.replace('FACT','')
+#     a=a.replace('RULE','')
+#     a=a.replace(' ','')
+#     return a
+# def tt(a):#tuple to tuple canges a(k) to a,k
+#     if '(' in a:
+#         if len(a)==4:
+#             a=a.replace(')','')
+#             return (a[0],a[-1])
+#         else:
+#             temp=a[2:-1]
+#             return (a[0],temp[:temp.find(',')],temp[temp.find(',')+1:])
+#     return a
+# def infer(fact, rule):
+#     a=clean(fact)# changes 'FACT a' to 'a'
+#     b=clean(rule)# changes 'RULE a => FACT b' to 'a=>b'
+#     if  a+"=>" in b:
+#         b=b.replace(a+"=>",'')
+#         if '=>' in b:# returns rule
+#             return rules.RULE(tt(b[:b.find("=>")]),rules.FACT(tt(b[b.find('=>')+2:])))
+#         return rules.FACT(tt(b)) #returns Fact
+#     if a==a.lower(): #fact has no Variables
+#         if b==b.lower():
+#             return None
+#         else:# changing a variable to a constant to see if it matches the fact 
+#             for x in string.uppercase:
+#                 for y in string.lowercase:
+#                     if a in b.replace(x,y):
+#                         return infer(a,b.replace(x,y))
+#     else: #fact has a variable
+#         for x in string.uppercase:
+#             for y in string.lowercase:
+#                 if a.replace(x,y) in b: # changing each variable to constants
+#                     return infer(a.replace(x,y),b)
 
 # test inference
 # these tests depend on a correct implementation
@@ -319,9 +329,9 @@ def ti(factstr, rulestr, resultstr) :
 test_infer = True
 if test_infer :
     # Propositional inference
-    ti("a.", "a => b.", "b.")
-    ti("c.", "a => b.", None)
-    ti("a.", "a => b => c.", "b => c.")
+    # ti("a.", "a => b.", "b.")
+    # ti("c.", "a => b.", None)
+    # ti("a.", "a => b => c.", "b => c.")
 
     # Instantiating variables
     ti("a(k).", "a(X) => b(X).", "b(k).")
