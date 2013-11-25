@@ -250,7 +250,7 @@ def infer(fact,rule):
     if unify.unify(fact.term,rule.cond,d):
         return rule.result.xform(sub)
     
-
+################## other method###############################
 # import string
 # def clean(a):
 #     if type(a)!=str:
@@ -289,7 +289,7 @@ def infer(fact,rule):
 #             for y in string.lowercase:
 #                 if a.replace(x,y) in b: # changing each variable to constants
 #                     return infer(a.replace(x,y),b)
-
+##################################other method #####################
 # test inference
 # these tests depend on a correct implementation
 # of addvariables and substitute, 
